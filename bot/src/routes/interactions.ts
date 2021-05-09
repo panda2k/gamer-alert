@@ -104,7 +104,7 @@ interactionRouter.post('', bodyParser.raw({type: 'application/json'}), async(req
         await gameralert.getGames(data.member.user.id, data.data.options[0].value, data.data.options[1].value)
             .then(async (result) => {
                 if (result.games.length == 0) {
-                    return await respondToInteraction(data.id, data.token, {
+                    return await updateInteractionMessage(data.application_id, data.token, {
                         content: "They've logged no games in the specified time period"
                     })
                 }

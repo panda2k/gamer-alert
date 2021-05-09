@@ -197,7 +197,7 @@ userRouter.get('/:id/games', async(req, res) => {
     try {
         await GameManager.getGamesByDiscordId(BigInt(req.params.id), BigInt(timespans[String(req.query.timespan)][0]), BigInt(timespans[String(req.query.timespan)][1]))
             .then(result => {
-                if (req.query.timespan == 'mostrecent') {
+                if (req.query.timespan == 'mostrecent' && result.length != 0) {
                     res.json({
                         timezone: timezone,
                         games: [result.pop()]
