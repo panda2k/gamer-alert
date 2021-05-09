@@ -1,5 +1,5 @@
-import League = require('./utils/league')
-import GamerAlert = require('./utils/gameralert')
+import League = require('../../league-client/src/league')
+import GamerAlert = require('../../api-client/src/gamer-alert')
 
 const log = (processName: string, message: string) => {
     let now = new Date()

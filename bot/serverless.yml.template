@@ -8,13 +8,13 @@ provider:
     
 functions:
   app:
-    handler: build/serverless.handler
+    handler: build/bot/src/serverless.handler
     events:
      - http: ANY /
      - http: 'ANY {proxy+}'
     environment:
       GAMER_ALERT_API_KEY: apikey
-      BASE_URL: apibaseurl
+      API_URL: apibaseurl
       APPLICATION_ID: discordappid
       BOT_TOKEN: discordbottoken
       APPLICATION_PUBLIC_KEY: discordappkey

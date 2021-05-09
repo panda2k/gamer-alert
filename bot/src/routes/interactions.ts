@@ -2,9 +2,9 @@ import Router from 'express'
 import nacl = require('tweetnacl')
 import bodyParser = require('body-parser')
 import got from 'got'
-import gameralert = require('../utils/gameralert')
-import { FinishedGame } from '../types/gamer_alert_interfaces'
-import league = require('../utils/league')
+import gameralert = require('../../../api-client/src/gamer-alert')
+import { FinishedGame } from '../../../api-client/src/types/gamer-alert'
+import league = require('../../../league-client/src/league')
 import { DateTime } from 'luxon'
 
 const PUBLIC_KEY = String(process.env.APPLICATION_PUBLIC_KEY)

@@ -1,9 +1,9 @@
-import League = require('./utils/league')
-import GamerAlert = require('./utils/gameralert')
-import { Session } from './interfaces/gamer_alert_interfaces'
+import League = require('../../league-client/src/league')
+import GamerAlert = require('../../api-client/src/gamer-alert')
+import { Session } from '../../api-client/src/types/gamer-alert'
 import crypto = require('crypto')
-import discord = require('./utils/discord')
-import { Champion } from './interfaces/league_interfaces'
+import discord = require('../../discord-client/src/discord')
+import { Champion } from '../../league-client/src/types/league'
 
 const log = (processName: string, message: string) => {
     let now = new Date()

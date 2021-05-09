@@ -1,5 +1,5 @@
 import got from 'got'
-import league = require('../interfaces/league_interfaces')
+import league = require('./types/league')
 require('dotenv').config()
 
 const BASE_URL = 'https://na1.api.riotgames.com/lol'
@@ -89,5 +89,6 @@ export = {
     getLiveGame,
     getGame,
     getChampionById,
-    getQueueDescription
+    getQueueDescription,
+    getLatestDataDragonVersion
 }
