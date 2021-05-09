@@ -1,0 +1,20 @@
+service: gamer-alert-api
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-west-2
+    
+functions:
+  app:
+    handler: build/serverless.handler
+    events:
+     - http: ANY /
+     - http: 'ANY {proxy+}'
+    environment:
+      API_KEYS: testapikey
+      DATABASE_URL: urlhere
+package:
+  patterns:
+    build/**

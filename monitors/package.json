@@ -1,0 +1,17 @@
+{
+  "name": "gamer-alert-services",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/app.js",
+    "deploy": "npm run build && sls deploy"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "got": "^11.8.2"
+  }
+}

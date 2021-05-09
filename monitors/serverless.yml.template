@@ -1,0 +1,30 @@
+service: gamer-alert-background-services
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: v2
+  region: us-west-2
+    
+functions:
+  user-monitor:
+    handler: build/services/league_user_monitor.handler
+    events:
+      - schedule: rate(1 minute)
+    environment:
+      GAMER_ALERT_API_KEY: apikey
+      RIOT_TOKEN: apikey
+      API_URL: api.com
+  game-monitor:
+    handler: build/services/league_game_monitor.handler
+    events:
+      - schedule: rate(1 minute)
+    environment:
+      GAMER_ALERT_API_KEY: apikey
+      RIOT_TOKEN: apikey
+      API_URL: api.com
+
+package:
+  patterns:
+    build/**
+
