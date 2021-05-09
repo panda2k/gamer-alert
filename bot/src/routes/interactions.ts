@@ -30,6 +30,12 @@ const updateInteractionMessage = async(appId: string, interactionToken: string, 
     return body
 }
 
+const createFollowupMessage = async(appId: string, interactionToken: string, data: Object) => {
+    const { body } = await got.post(`https://discord.com/api/v8/webhooks/${appId}/${interactionToken}`, {
+        json: data
+    })
+}
+
 const prettyTime = (time: number) => {
     const days = Math.floor(time / (1000 * 60 * 60 * 24))
     const hours = Math.floor(time / (1000 * 60 * 60) % 24)
@@ -118,16 +124,16 @@ interactionRouter.post('', bodyParser.raw({type: 'application/json'}), async(req
                 }
 
                 await updateInteractionMessage(data.application_id, data.token, {
-                    embeds: embeds
+                    embeds: embeds.slice(0, 10)
                 })
 
-                /*if (embeds.length >= 10) {
+                if (embeds.length >= 10) {
                     for (let i = 1; i < Math.ceil(embeds.length / 10); i++) {
-                        await followupInteraction(data.token, {
+                        await createFollowupMessage(data.application_id, data.token, {
                             embeds: embeds.slice(10 * i, 10 * (i + 1))
                         })
                     }
-                }*/ // fix later
+                }
             })
             .catch(async error => {
                 if (error.response) {
