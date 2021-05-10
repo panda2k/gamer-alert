@@ -23,6 +23,36 @@ const sendWebhook = async(webhookUrl: string, leagueName: string, webhookImageUr
     return result
 }
 
+const respondToInteraction = async(interactionId: string, interactionToken: string, data: Object, responseType?: number) => {
+    const { body } = await got.post(`https://discord.com/api/v8/interactions/${interactionId}/${interactionToken}/callback`, {
+        json: {
+            type: responseType || 4,
+            data: data
+        }
+    })
+
+    return body
+}
+
+const updateInteractionMessage = async(appId: string, interactionToken: string, data: Object) => {
+    const { body } = await got.patch(`https://discord.com/api/v8/webhooks/${appId}/${interactionToken}/messages/@original`, {
+        json: data
+    })
+
+    return body
+}
+
+const createFollowupMessage = async(appId: string, interactionToken: string, data: Object) => {
+    const { body } = await got.post(`https://discord.com/api/v8/webhooks/${appId}/${interactionToken}`, {
+        json: data
+    })
+
+    return body
+}
+
 export = {
-    sendWebhook
+    sendWebhook,
+    respondToInteraction,
+    createFollowupMessage,
+    updateInteractionMessage
 }
