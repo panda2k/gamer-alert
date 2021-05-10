@@ -102,3 +102,4 @@ tests/cases/user/prettier/prettier
 serverless.yml
 build
 .serverless
+.env
