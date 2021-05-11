@@ -2,7 +2,7 @@ import got from 'got'
 
 const PROFILE_PIC_URL = 'https://i.imgur.com/2uDC1k5.png'
 
-const sendWebhook = async(webhookUrl: string, leagueName: string, webhookImageUrl: string|null) => {
+const sendWebhook = async(webhookUrl: string, leagueName: string, webhookImageUrl: string|null, extraMessage?: string) => {
     const result = await got.post(webhookUrl, {
         json: {
             content: null,
@@ -10,7 +10,7 @@ const sendWebhook = async(webhookUrl: string, leagueName: string, webhookImageUr
             "avatar_url": PROFILE_PIC_URL,
             embeds: [
                 {
-                    title: `${leagueName} has started a new League of Legends game`,
+                    title: `${leagueName} has started a new League of Legends game` + (extraMessage ?  extraMessage : ''),
                     color: 16711680,
                     image: {
                         url: webhookImageUrl

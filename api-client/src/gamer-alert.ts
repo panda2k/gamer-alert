@@ -48,13 +48,14 @@ const createGame = async(gameId: string, sessionId: string, matchId: number, gam
     return body
 }
 
-const createGameJob = async(id: string, matchId: number, gameId: string, leagueName: string): Promise<Object> => {
+const createGameJob = async(id: string, matchId: number, gameId: string, leagueName: string, discordId: number): Promise<Object> => {
     const { body } = await client.post('jobs/game', {
         json: {
             gameId: gameId,
             leagueName: leagueName,
             id: id,
-            matchId: matchId
+            matchId: matchId,
+            discordId: discordId
         }
     })
 
@@ -163,6 +164,20 @@ const addUserToServer = async(discordId: number, serverId: number): Promise<stri
     return body
 }
 
+const addTimeToDay = async(discordId: number, timeToAdd: number): Promise<string> => {
+    const { body } = await client.post(`users/${discordId}/days/playtime`, {
+        json: { timeToAdd: timeToAdd }
+    })
+
+    return body
+}
+
+const getUserDays = async(discordId: number): Promise<Array<types.Day>> => {
+    const { body } = await client.get(`users/${discordId}/days`)
+
+    return body as unknown as Array<types.Day>
+}
+
 export = {
     getUserSessions,
     getSessionGames,
@@ -181,5 +196,7 @@ export = {
     createServer,
     createUser,
     setLeagueUsername,
-    addUserToServer
+    addUserToServer,
+    addTimeToDay,
+    getUserDays
 }

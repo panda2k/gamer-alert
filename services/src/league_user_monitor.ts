@@ -83,26 +83,52 @@ const checkProfile = async (leagueName: string, discordId: number, latestSession
                         crypto.randomBytes(8).toString('hex'),
                         game.gameId,
                         gameId,
-                        leagueName
+                        leagueName,
+                        discordId
                     )
                         .then(() => {
                             log('checkProfile', `Added game to task queue`)
                             
-                            return GamerAlert.getUserServers(discordId)
-                                .then(servers => {
-                                    let promises: Array<Promise<any>> = []
+                            return GamerAlert.getUserDays(discordId)
+                                .then(days => {
+                                    let streak = 0
 
-                                    for (let i = 0; i < servers.length; i++) {
-                                        if (servers[i].alert_webhook) {
-                                            promises.push(discord.sendWebhook(servers[i].alert_webhook || '', leagueName, servers[i].alert_image_url)
-                                                .catch(error => {
-                                                    log('checkProfile', `Error when posting alert to discord webhook. Error: ${error}. Webhook: ${servers[i].alert_webhook}`)
-                                                })
-                                            )
+                                    for (let i = days.length - 2; i >= 0; i--) { // don't count latest day
+                                        if (!days[i].time_exceeded) {
+                                            streak++
+                                        } else {
+                                            break
                                         }
                                     }
 
-                                    return Promise.all(promises)
+                                    const latestDay = days.pop()
+                                    let extraMessage: string|undefined
+
+                                    if (latestDay) {
+                                        if(latestDay.play_time > latestDay.time_limit && !latestDay.time_exceeded) {
+                                            extraMessage = `. This breaks their daily time limit. `
+                                            if (streak > 0) {
+                                                extraMessage += `Before this, they had a time limit streak of ${streak} days`
+                                            }
+                                        }
+                                    }
+
+                                    return GamerAlert.getUserServers(discordId)
+                                        .then(servers => {
+                                            let promises: Array<Promise<any>> = []
+        
+                                            for (let i = 0; i < servers.length; i++) {
+                                                if (servers[i].alert_webhook) {
+                                                    promises.push(discord.sendWebhook(servers[i].alert_webhook || '', leagueName, servers[i].alert_image_url, extraMessage)
+                                                        .catch(error => {
+                                                            log('checkProfile', `Error when posting alert to discord webhook. Error: ${error}. Webhook: ${servers[i].alert_webhook}`)
+                                                        })
+                                                    )
+                                                }
+                                            }
+        
+                                            return Promise.all(promises)
+                                        })
                                 })
                         })
                         .catch(error => {

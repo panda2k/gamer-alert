@@ -38,5 +38,14 @@ export interface Game {
 export interface GameJob {
     id: string,
     game_id: bigint,
-    league_name: string
+    league_name: string,
+    discord_id: bigint
+}
+
+export interface Day {
+    timestamp: bigint,
+    discord_id: bigint,
+    play_time: number,
+    time_limit: number,
+    time_exceeded: boolean
 }

@@ -49,7 +49,7 @@ const changeUserLeagueName = async(discordId: bigint, leagueName: string): Promi
 
 const setUserTimeLimit = async(discordId: bigint, timeLimit: number) => {
     const result = db.query(
-        'UPDATE users SET daily_time_limit=$1 WHERE discord_id=$2',
+        'UPDATE users SET time_limit=$1 WHERE discord_id=$2',
         [timeLimit, discordId]
     )
 

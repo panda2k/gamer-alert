@@ -12,10 +12,7 @@ const monitorGames = async () => {
             log(`checkGame`, `Checking a total of ${jobs.length} games`)
 
             for (let i = 0; i < jobs.length; i++) {
-                console.log(`${i}/${jobs.length}`)
-                const currentJob = jobs[i]
-                log(`checkGame`, String(currentJob))
-        
+                const currentJob = jobs[i]        
                 log('checkGame', `checking ${currentJob.league_name}'s game`)
                 await League.getGame(currentJob.match_id)
                     .then(async game => {
@@ -43,14 +40,21 @@ const monitorGames = async () => {
                             game.participants[participantId - 1].stats.totalMinionsKilled + game.participants[participantId - 1].stats.neutralMinionsKilled,
                             game.teams[(teamId / 100) - 1].win != 'Fail'
                         )
-                            .catch(error => {
-                                log('checkGame', `Error when updating game. ${error.response.body.error}`)
-                            })
-                        
-                        await GamerAlert.deleteGameJob(currentJob.id)
-                            .catch(error => {
-                                log('checkGame', `Error when deleting game with id ${currentJob.game_id}. Error: ${error}`)
-                            })
+                            .then(() => {
+                                return GamerAlert.addTimeToDay(currentJob.discord_id, parseInt((game.gameDuration / 60).toString()))
+                                    .then(() => {
+                                        return GamerAlert.deleteGameJob(currentJob.id)
+                                        .catch(error => {
+                                            log('checkGame', `Error when deleting game with id ${currentJob.game_id}. Error: ${error}`)
+                                        })
+                                    })
+                                        .catch(error => {
+                                            log('checkGame', `Error when updating game. ${error.response.body.error}`)
+                                        })
+                                    })
+                                    .catch(error => {
+                                        log('checkGame', `Error when adding time to day. ${error}`)
+                                    })
                     })
                     .catch (error => {
                         if (error.message.includes(404)) { // game not finished

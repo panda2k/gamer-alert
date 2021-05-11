@@ -12,7 +12,7 @@ CREATE TABLE servers (
 CREATE TABLE users (
     discord_id BIGINT NOT NULL PRIMARY KEY,
     league_username VARCHAR(16) UNIQUE,
-    daily_time_limit INT,
+    time_limit INT,
     time_zone VARCHAR(255)
 );
 
@@ -53,7 +53,18 @@ CREATE TABLE game_jobs(
     match_id BIGINT NOT NULL,
     league_name VARCHAR(16) NOT NULL,
     game_id VARCHAR(16) NOT NULL,
+    discord_id BIGINT NOT NULL,
+    FOREIGN KEY (discord_id) REFERENCES users(discord_id),
     FOREIGN KEY (game_id) REFERENCES games(id)
+);
+
+CREATE TABLE days(
+    timestamp BIGINT NOT NULL,
+    discord_id BIGINT NOT NULL,
+    play_time INT NOT NULL,
+    time_limit INT NOT NULL,
+    time_exceeded BOOLEAN DEFAULT false NOT NULL,
+    FOREIGN KEY (discord_id) REFERENCES users(discord_id)
 );
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO gameralert;

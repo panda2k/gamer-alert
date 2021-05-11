@@ -1,10 +1,10 @@
 import db = require('../db')
 import { GameJob } from '../types'
 
-const createGameJob = async(id: string, matchId: bigint, gameId: string, leagueName: string) => {
+const createGameJob = async(id: string, matchId: bigint, gameId: string, leagueName: string, discordId: bigint) => {
     const result = await db.query(
-        'INSERT INTO game_jobs(id, game_id, league_name, match_id) VALUES($1, $2, $3, $4)',
-        [id, gameId,  leagueName, matchId]
+        'INSERT INTO game_jobs(id, game_id, league_name, match_id, discord_id) VALUES($1, $2, $3, $4, $5)',
+        [id, gameId,  leagueName, matchId, discordId]
     )
 
     return result

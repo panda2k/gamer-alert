@@ -4,6 +4,7 @@ import SessionManager = require('../services/sessions')
 import GameManager = require('../services/games')
 import { User } from '../types'
 import { DateTime } from 'luxon'
+import DayManager = require('../services/days')
 
 const userRouter = express.Router()
 
@@ -296,10 +297,60 @@ userRouter.post('/:id/time-zone', async(req, res) => {
             })
     } catch (error) {
         if (error.message.includes("Cannot convert")) {
-            res.status(404).json({'error': `User id ${req.params.id} invalid`})
+            res.status(400).json({'error': `User id ${req.params.id} invalid`})
         } else {
             console.log(error)
             res.status(500).json({'error': 'Uncaught error'})
+        }
+    }
+})
+
+userRouter.post('/:id/days/playtime', async(req, res) => {
+    let user: User|undefined
+
+    try {
+        user = await UserManager.getUser(BigInt(req.params.id))
+    } catch (error) {
+        if (error.message.includes("Cannot convert")) {
+            return res.status(400).json({'error': `Discord id ${req.params.id} invalid`})
+        } else {
+            console.log(error)
+            return res.status(500).json({'error': 'Uncaught error'})
+        }
+    }
+
+    if (!user) {
+        return res.status(404).json({'error': `User with discord id ${req.params.id} is not found`})
+    }
+
+    const today = DateTime.now().setZone(user.time_zone || 'Etc/GMT').startOf('day').setZone('Etc/GMT').startOf('day').toMillis()
+
+    await DayManager.addPlayTime(BigInt(today), BigInt(req.params.id), req.body.timeToAdd, user.time_limit || 24 * 60)
+        .then(() => {
+            return res.json({'message': 'Successfully added time'})
+        })
+        .catch(error => {
+            if (error.message.includes('Day not found')) {
+                return res.status(404).json({'error': 'No day found for today'})
+            } else {
+                console.log(error)
+                return res.status(500).json({'error': 'Uncaught error'})
+            }
+        })
+})
+
+userRouter.get('/:id/days', async(req, res) => {
+    try {
+        await DayManager.getUserDays(BigInt(req.params.id))
+            .then(result => {
+                return res.json(result)
+            })
+    } catch (error) {
+        if (error.message.includes("Cannot convert")) {
+            return res.status(400).json({'error': `Discord id ${req.params.id} invalid`})
+        } else {
+            console.log(error)
+            return res.status(500).json({'error': 'Uncaught error'})
         }
     }
 })

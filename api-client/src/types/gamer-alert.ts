@@ -56,10 +56,19 @@ export interface GameJob {
     id: string,
     game_id: string,
     league_name: string,
-    match_id: number
+    match_id: number,
+    discord_id: number
 }
 
 export interface FetchedGames {
     timezone: string,
     games: Array<FinishedGame>
+}
+
+export interface Day {
+    timestamp: string,
+    discord_id: string,
+    play_time: number,
+    time_limit: number,
+    time_exceeded: boolean
 }
