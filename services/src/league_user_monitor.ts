@@ -23,6 +23,10 @@ const checkProfile = async(leagueName: string, discordId: number, latestSession:
         return
     }
 
+    if (liveGame.gameStartTime == 0) {
+        return
+    }
+
     const currentTime = new Date().getTime()
     let sessionId: string | undefined
 
