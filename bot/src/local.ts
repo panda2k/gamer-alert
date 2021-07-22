@@ -1,10 +1,9 @@
-import express = require('express')
 import app = require('./app')
 import fs = require('fs')
 import http = require('http')
 import https = require('https')
+require('dotenv').config()
 
-const port = process.env.PORT || 80
 const privateKey = fs.readFileSync('/etc/letsencrypt/live/bot.gameralert.lol/privkey.pem', 'utf-8')
 const certificate = fs.readFileSync('/etc/letsencrypt/live/bot.gameralert.lol/cert.pem', 'utf-8')
 const ca = fs.readFileSync('/etc/letsencrypt/live/bot.gameralert.lol/chain.pem', 'utf-8')

@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node build/local.js",
-    "dev": "concurrently \"tsc -w\" \"nodemon build/local.js\"",
-    "setup": "node build/setup.js",
+    "start": "node build/bot/src/local.js",
+    "dev": "concurrently \"tsc -w\" \"nodemon build/bot/src/local.js\"",
+    "setup": "node build/bot/src/setup.js",
     "deploy": "npm run build && sls deploy"
   },
   "repository": {
