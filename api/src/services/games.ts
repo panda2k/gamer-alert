@@ -31,11 +31,19 @@ const updateGame = async(id: string, endTime: bigint, kills: number, deaths: num
 
 const getGamesByDiscordId = async(discordId: bigint, startTime: bigint, endTime: bigint): Promise<Array<Game>> => {
     let games: Array<Game> = []
+    let sessions: Array<Session> = []
 
-    const sessions: Array<Session> = (await db.query(
-        'SELECT * FROM sessions WHERE discord_id=$1 AND start_time<=$2 AND start_time>=$3',
-        [discordId, endTime, startTime]
-    )).rows
+    if (startTime != 0n) {
+        sessions = (await db.query(
+            'SELECT * FROM sessions WHERE discord_id=$1 AND start_time<=$2 AND start_time>=$3',
+            [discordId, endTime, startTime]
+        )).rows
+    } else {
+        sessions = (await db.query(
+            'SELECT * FROM sessions WHERE discord_id=$1 ORDER BY start_time DESC LIMIT 1',
+            [discordId]
+        )).rows
+    }
 
     for (let i = 0; i < sessions.length; i++) {
         console.log(`Fetching games from session ${i}`)

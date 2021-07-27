@@ -142,7 +142,6 @@ userRouter.get('/:id/games', async(req, res) => {
 
     if (!targetUser) {
         return res.status(404).json({'error': `No user with discord id ${req.params.id} found`})
-        return
     }
 
     let timezone: string
@@ -162,7 +161,6 @@ userRouter.get('/:id/games', async(req, res) => {
         "yesterday": [startToday - 1000 * 60 * 60 * 24, startToday],
         "week": [now - 1000 * 60 * 60 * 24 * 7, now],
         "month": [now - 1000 * 60 * 60 * 24 * 30, now],
-        "all": [0, now]
     })
 
     if (!timespans[String(req.query.timespan)]) {

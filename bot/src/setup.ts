@@ -44,10 +44,6 @@ const commands = [
                         name: "Last 30 Days",
                         value: "month"
                     },
-                    {
-                        name: "All Games (Warning This May Spam the Current Channel)",
-                        value: "all"
-                    }
                 ]
             }
         ]
