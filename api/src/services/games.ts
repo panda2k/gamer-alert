@@ -38,6 +38,7 @@ const getGamesByDiscordId = async(discordId: bigint, startTime: bigint, endTime:
     )).rows
 
     for (let i = 0; i < sessions.length; i++) {
+        console.log(`Fetching games from session ${i}`)
         const { rows } = await db.query(
             'SELECT * FROM games WHERE session_id=$1 AND win IS NOT NULL',
             [sessions[i].id]
