@@ -5,3 +5,29 @@
     color: #FFFFFF;
     font-family: 'Open Sans', sans-serif;
 }
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+.no-border {
+    border:0px;
+    outline:0px;
+    border-style: hidden;
+}
+
+.no-hover:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.white-text {
+    color: white
+}
+
+.rounded-corner {
+    border-radius: 10px !important;
+}
